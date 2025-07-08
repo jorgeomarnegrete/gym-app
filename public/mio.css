@@ -1,0 +1,72 @@
+.h2_m{
+    color: brown;
+    font-size:larger;
+    font-weight: bold;
+}
+
+.pad_field{
+    padding-bottom: 15px;
+}
+
+
+.btn_green{
+    border-radius: 3px;
+    padding: 20px 15px;
+    color: white;
+    background-color: forestgreen;
+}
+
+.btn_green:hover{
+    background-color: darkseagreen;
+}
+
+.btn_green:active{
+    background-color: chocolate;
+}
+
+.btn_b{
+    border-radius: 3px;
+    padding: 10px;
+    color: white;
+    background-color: darkgreen;
+}    
+    
+
+.btn_b:hover{
+    background-color: burlywood;
+}
+
+.form_m{
+    background-color: white;
+    border-radius: 6px;
+    color: gray;
+    padding: 20px;
+    margin: 0 auto;
+    width: 570px;
+}
+
+input, textarea{
+	border: 0;
+	outline: none;
+	width: 280px;
+}
+
+.field_m{
+	border: solid 1px #ccc;
+    border-radius: 3px;
+	padding: 10px;
+    width: 530px;
+	
+	}
+
+.field_m:focus{
+    border-color: red;
+}
+
+.field:focus{
+	border-color: #18A383;
+}
+
+.center-content{
+	text-align: center;
+}
