@@ -18,7 +18,4 @@
 
     </div>
     
-    <!--
-    <script src="{{ asset('validar-fechas-socios.js') }}"></script>
-    -->
 </x-app-layout>

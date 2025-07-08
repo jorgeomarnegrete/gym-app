@@ -100,15 +100,48 @@ class ClaseSocioController extends Controller
     public function edit(string $id)
     {
         //
+        $clasesocio = ClaseSocio::findOrFail($id);
+
+        $socios = Socio::orderBy('nombre')->get();
+        $clases = Clases::orderBy('nombre')->get();
+        $asistentes = Asistente::orderBy('nombre')->get();
+
+        return view('clasesocios.edit', compact('clasesocio', 'socios', 'clases', 'asistentes'));
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, ClaseSocio $clasesocio)
     {
-        //
+            //
+            $validated = $request->validate([
+            'socio_id' => ['required', 'exists:socios,id'],
+            'clase_id' => ['required', 'exists:clases,id'],
+            'asistente_id' => ['required', 'exists:asistentes,id'],
+            'fecha' => ['required', 'date'],
+            'asistio' => ['nullable', 'boolean'],
+            ], [
+            'socio_id.required' => 'Seleccioná un socio.',
+            'clase_id.required' => 'Seleccioná una clase.',
+            'asistente_id.required' => 'Seleccioná un asistente.',
+            'fecha.required' => 'La fecha es obligatoria.',
+            ]);
+
+            $clasesocio->update([
+            'socio_id' => $validated['socio_id'],
+            'clase_id' => $validated['clase_id'],
+            'asistente_id' => $validated['asistente_id'],
+            'fecha' => $validated['fecha'],
+            'asistio' => $request->has('asistio'), // Checkbox + hidden = cobertura total
+            ]);
+
+        return redirect()
+            ->route('clasesocios.index')
+            ->with('success', 'Clase actualizada correctamente.');
     }
+
 
     /**
      * Remove the specified resource from storage.
