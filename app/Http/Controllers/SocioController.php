@@ -107,9 +107,13 @@ class SocioController extends Controller
         $fecha2 = \Carbon\Carbon::createFromFormat('d/m/Y', $request->fecha_inscripcion)->format('Y-m-d'); 
 
         $validated = $request->validate([
-            'nombre'   => 'required|string|max:255',
-            'dni'      => 'required|string|max:20',
-            'telefono' => 'nullable|string|max:20',
+            'nombre'        => 'required|string|max:255',
+            'dni'           => 'required|string|max:20',
+            'telefono'      => 'nullable|string|max:20',
+            'direccion'     => 'nullable|string|max:255',
+            'localidad'     => 'nullable|string|max:255',
+            'seguro_medico' => 'nullable|string|max:255',
+            'tel_emergencia'=> 'nullable|string|max:255',
             'activo'   => 'nullable',
         // Agregá tus campos nuevos acá también
         ]);

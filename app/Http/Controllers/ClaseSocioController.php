@@ -115,6 +115,7 @@ class ClaseSocioController extends Controller
      */
     public function update(Request $request, ClaseSocio $clasesocio)
     {
+
             //
             $validated = $request->validate([
             'socio_id' => ['required', 'exists:socios,id'],
@@ -134,7 +135,7 @@ class ClaseSocioController extends Controller
             'clase_id' => $validated['clase_id'],
             'asistente_id' => $validated['asistente_id'],
             'fecha' => $validated['fecha'],
-            'asistio' => $request->has('asistio'), // Checkbox + hidden = cobertura total
+            'asistio' => (bool) $request->input('asistio'),
             ]);
 
         return redirect()
