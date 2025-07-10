@@ -16,6 +16,7 @@ class ClaseSocio extends Model
         'asistente_id',
         'fecha',
         'asistio',
+        'pagado',
     ];
 
     // Relaciones

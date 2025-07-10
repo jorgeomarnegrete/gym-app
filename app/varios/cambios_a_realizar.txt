@@ -1,0 +1,19 @@
+Crear tabla caja
+    id
+    fecha_hora - datetime()
+    tipo_comp - int
+    numero - decimal 10,0
+    concepto - varchar(255)
+    entrada - decimal(12,2)
+    salida  - decimal (12,2)
+    cerrada - bolean
+
+
+otros_pagos
+    id
+    fecha_hora - DateTime()
+    tipo_pago - int
+    numero - decimal(10)
+    importe - decimal(12,2)
+
+
