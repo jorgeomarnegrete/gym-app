@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('caja_aperturas', function (Blueprint $table) {
+        Schema::create('numeradores', function (Blueprint $table) {
             $table->id();
-            $table->date('fecha');
-            $table->time('hora');
-            $table->decimal('monto_inicial', 10, 2)->default(0);
-            $table->string('usuario')->nullable(); // opcional, si querés registrar quién abrió
+            $table->string('nombre')->unique(); // ej: 'recibo_caja', 'vale_caja'
+            $table->unsignedBigInteger('ultimo_numero')->default(0);
             $table->timestamps();
         });
-
     }
 
     /**
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('caja_aperturas');
+        Schema::dropIfExists('numeradores');
     }
 };
