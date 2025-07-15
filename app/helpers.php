@@ -18,3 +18,12 @@ if (!function_exists('generarNumero')) {
         return "{$prefijo}-{$numero}";
     }
 }
+
+
+if (!function_exists('formatearMonto')) {
+    function formatearMonto(float $monto): string
+    {
+        return '$ ' . number_format($monto, 2, ',', '.');
+    }
+}
+
