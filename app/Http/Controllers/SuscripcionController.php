@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Suscripcion;
 use App\Models\Socio;
+use App\Models\CajaMovimiento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SuscripcionController extends Controller
 {
@@ -53,7 +56,6 @@ class SuscripcionController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $validated = $request->validate([
             'socio_id' => ['required', 'exists:socios,id'],
             'tipo' => ['required', 'in:1,2,3,4'],
@@ -63,26 +65,54 @@ class SuscripcionController extends Controller
             'fecha_fin' => ['nullable', 'date', 'after_or_equal:fecha_inicio'],
             'monto' => ['required', 'numeric', 'min:0'],
             'observaciones' => ['nullable', 'string', 'max:1000'],
-        ], [
-            'socio_id.required' => 'Seleccioná un socio.',
-            'socio_id.exists' => 'El socio seleccionado no existe.',
-            'tipo.required' => 'Seleccioná un tipo de suscripción.',
-            'forma_pago.required' => 'Seleccioná una forma de pago.',
-            'fecha_inicio.required' => 'La fecha de inicio es obligatoria.',
-            'fecha_fin.after_or_equal' => 'La fecha de fin no puede ser anterior a la de inicio.',
-            'monto.required' => 'Debe especificarse un monto.',
         ]);
 
-        Suscripcion::create($validated + [
-            'activo' => $request->has('activo'),
-        ]);
+        DB::beginTransaction();
 
-        return redirect()
-            ->route('suscripciones.index')
-            ->with('success', 'Suscripción creada correctamente.');
+        try {
+            $suscripcion = Suscripcion::create($validated + [
+                'activo' => $request->has('activo'),
+            ]);
 
-        
+            if ((int) $validated['forma_pago'] === 1) {
+                $numeroRecibo = generarNumero('recibo_caja');
+
+                CajaMovimiento::create([
+                    'fecha' => today(),
+                    'monto' => $validated['monto'],
+                    'tipo' => 'ingreso',
+                    'socio_id' => $validated['socio_id'],
+                    'recibo_numero' => $numeroRecibo,
+                    'concepto' => 'Pago suscripción',
+                ]);
+
+                $pdf = Pdf::loadView('pdf.recibo', [
+                    'numero' => $numeroRecibo,
+                    'fecha' => today()->format('d/m/Y'),
+                    'socio' => Socio::find($validated['socio_id']),
+                    'monto' => formatearMonto($validated['monto']),
+                    'concepto' => 'Pago suscripción',
+                ]);
+
+                return $pdf->download("recibo_{$numeroRecibo}.pdf");
+
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('suscripciones.index')
+                ->with('success', 'Suscripción creada correctamente.');
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return redirect()
+                ->route('suscripciones.index')
+                ->with('error', 'Ocurrió un error al registrar la suscripción. Intentá nuevamente.');
+        }
     }
+
 
     /**
      * Display the specified resource.
