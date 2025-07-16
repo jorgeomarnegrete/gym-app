@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Numerador;
+use Illuminate\Support\Facades\Storage;
+
 
 if (!function_exists('generarNumero')) {
     function generarNumero(string $nombre = 'recibo_caja'): string
@@ -26,4 +28,25 @@ if (!function_exists('formatearMonto')) {
         return '$ ' . number_format($monto, 2, ',', '.');
     }
 }
+
+if (!function_exists('guardarReciboPDF')) {
+    function guardarReciboPDF(string $numeroRecibo, string $contenidoPDF): string
+    {
+        $filename = "{$numeroRecibo}.pdf";
+
+        // Asegurarse que la carpeta exista
+        if (!Storage::disk('recibos')->exists('/')) {
+            Storage::disk('recibos')->makeDirectory('/');
+        }
+
+        // Guardar el archivo
+        Storage::disk('recibos')->put($filename, $contenidoPDF);
+
+        // Devolver la URL pública
+        return Storage::disk('recibos')->url($filename);
+    }
+}
+
+
+
 

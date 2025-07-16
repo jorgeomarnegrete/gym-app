@@ -60,6 +60,14 @@ return [
             'report' => false,
         ],
 
+        'recibos' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/recibos'),
+            'url' => env('APP_URL') . '/storage/recibos',
+            'visibility' => 'public',
+        ],
+
+
     ],
 
     /*

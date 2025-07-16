@@ -84,4 +84,12 @@
         {{ $suscripciones->links() }}
     </div>
     
+    @if(session('recibo_url'))
+        <a id="abrir-recibo" href="{{ session('recibo_url') }}" target="_blank" style="display: none;"></a>
+        <script>
+            document.getElementById('abrir-recibo').click();
+        </script>
+    @endif
+
+
 </x-app-layout>

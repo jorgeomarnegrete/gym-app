@@ -94,15 +94,19 @@ class SuscripcionController extends Controller
                     'concepto' => 'Pago suscripción',
                 ]);
 
-                return $pdf->download("recibo_{$numeroRecibo}.pdf");
+                $urlRecibo = guardarReciboPDF($numeroRecibo, $pdf->output());
+
+
 
             }
 
             DB::commit();
 
             return redirect()
-                ->route('suscripciones.index')
-                ->with('success', 'Suscripción creada correctamente.');
+                    ->route('suscripciones.index')
+                    ->with('recibo_url', $urlRecibo)
+                    ->with('success', 'Suscripción creada correctamente.');
+
 
         } catch (\Throwable $e) {
             DB::rollBack();
