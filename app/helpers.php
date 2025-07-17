@@ -2,6 +2,8 @@
 
 use App\Models\Numerador;
 use Illuminate\Support\Facades\Storage;
+use App\Models\OtrosPago;
+use Illuminate\Support\Carbon;
 
 
 if (!function_exists('generarNumero')) {
@@ -47,6 +49,25 @@ if (!function_exists('guardarReciboPDF')) {
     }
 }
 
+if (!function_exists('registrarOtroPago')) {
+    function registrarOtroPago(int $socioId, string $medio, float $importe, ?Carbon $fecha = null): void
+    {
+        $descripcion = generarDescripcionPago($medio);
 
+        OtrosPago::create([
+            'fecha' => $fecha ?? today(),
+            'socio_id' => $socioId,
+            'descripcion' => $descripcion,
+            'importe' => $importe,
+        ]);
+    }
+}
+
+if (!function_exists('generarDescripcionPago')) {
+    function generarDescripcionPago(string $medio): string
+    {
+        return "Pago con {$medio}";
+    }
+}
 
 
